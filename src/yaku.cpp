@@ -1,7 +1,7 @@
 #include <bitset>
 #include <iostream>
 
-#include "xrand.h"
+#include "lib/xrand.h"
 
 xrand rng;
 
