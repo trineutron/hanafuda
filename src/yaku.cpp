@@ -10,7 +10,6 @@
 xrand rng;
 
 int main() {
-    std::uniform_int_distribution<> dist(0, 2);
     int score_dist[60]{};
     for (int k = 0; k < 1000000; k++) {
         std::array<int, 48> deck;
