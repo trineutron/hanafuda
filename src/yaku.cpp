@@ -24,6 +24,7 @@ int main() {
 
         std::array<Gain, 2> hand{};
         std::array<int, 2> score{0, 0};
+        int winner = 0;
         for (int i = 0; i < 40; i++) {
             const int card = deck[i];
             if (board[card >> 2] == -1) {
@@ -35,10 +36,11 @@ int main() {
                 if (hand[i & 1].score()) {
                     if (score[1 - (i & 1)]) break;
                     score[i & 1] = hand[i & 1].score();
+                    winner = i & 1;
                 }
             }
         }
-        score_dist[score[0] + score[1]]++;
+        score_dist[score[winner]]++;
     }
 
     int maximum = 0, total = 0;
