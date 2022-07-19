@@ -40,7 +40,7 @@ int main() {
                 }
             }
         }
-        score_dist[score[winner]]++;
+        score_dist[hand[winner].score_kasu()]++;
     }
 
     int maximum = 0, total = 0;
