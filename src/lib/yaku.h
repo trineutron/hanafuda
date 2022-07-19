@@ -10,6 +10,7 @@ class Gain {
     Gain() : gain() {}
     Gain(State hand) : gain(hand) {}
 
+    bool get(int idx) const { return gain[idx]; }
     void set(int idx, bool x = true) { gain[idx] = x; }
 
     std::vector<int> match(int card) {
@@ -23,7 +24,7 @@ class Gain {
         return res;
     }
 
-    int score_hikari() {
+    int score_hikari() const {
         constexpr State mask_hikari{0x100010000101};
         const int hikari = 2 * (gain & mask_hikari).count() + gain[40];
         switch (hikari) {
@@ -40,7 +41,7 @@ class Gain {
         }
     }
 
-    int score_akatan() {
+    int score_akatan() const {
         constexpr State mask_akatan{0x000000000222};
         const int akatan = (gain & mask_akatan).count();
         if (akatan == 3) {
@@ -50,7 +51,7 @@ class Gain {
         }
     }
 
-    int score_aotan() {
+    int score_aotan() const {
         constexpr State mask_aotan{0x002200200000};
         const int aotan = (gain & mask_aotan).count();
         if (aotan == 3) {
@@ -60,7 +61,7 @@ class Gain {
         }
     }
 
-    int score_inoshika() {
+    int score_inoshika() const {
         constexpr State mask_inoshika{0x001001100000};
         const int inoshika = (gain & mask_inoshika).count();
         if (inoshika == 3) {
@@ -70,7 +71,7 @@ class Gain {
         }
     }
 
-    int score_tane() {
+    int score_tane() const {
         constexpr State mask_tane{0x021121111010};
         const int tane = (gain & mask_tane).count();
         if (tane >= 5) {
@@ -80,7 +81,7 @@ class Gain {
         }
     }
 
-    int score_tan() {
+    int score_tan() const {
         constexpr State mask_tan{0x042202222222};
         const int tan = (gain & mask_tan).count();
         if (tan >= 5) {
@@ -90,7 +91,7 @@ class Gain {
         }
     }
 
-    int score_kasu() {
+    int score_kasu() const {
         constexpr State mask_kasu{0xE8CDCCCCCCCC};
         const int kasu = (gain & mask_kasu).count();
         if (kasu >= 10) {
@@ -100,7 +101,7 @@ class Gain {
         }
     }
 
-    int score() {
+    int score() const {
         return score_hikari() + score_akatan() + score_aotan() +
                score_inoshika() + score_tane() + score_tan() + score_kasu();
     }
