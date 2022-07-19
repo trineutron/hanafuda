@@ -1,4 +1,5 @@
 #include <bitset>
+#include <vector>
 
 class Gain {
     using State = std::bitset<48>;
@@ -9,7 +10,18 @@ class Gain {
     Gain() : gain() {}
     Gain(State hand) : gain(hand) {}
 
-    void set(int idx, bool x) { gain[idx] = x; }
+    void set(int idx, bool x = true) { gain[idx] = x; }
+
+    std::vector<int> match(int card) {
+        const int base = card & ~3;
+        std::vector<int> res;
+        for (int i = 0; i < 4; i++) {
+            if (gain[base + i]) {
+                res.emplace_back(base + i);
+            }
+        }
+        return res;
+    }
 
     int score_hikari() {
         constexpr State mask_hikari{0x100010000101};

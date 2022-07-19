@@ -16,22 +16,19 @@ int main() {
         std::iota(deck.begin(), deck.end(), 0);
         std::shuffle(deck.begin(), deck.end(), rng);
 
-        std::array<int, 12> board;
-        for (int i = 0; i < 12; i++) {
-            board[i] = -1;
-        }
-
+        Gain board;
         std::array<Gain, 2> hand{};
         std::array<int, 2> score{0, 0};
         int winner = 0;
         for (int i = 0; i < 40; i++) {
             const int card = deck[i];
-            if (board[card >> 2] == -1) {
-                board[card >> 2] = card;
+            auto match{board.match(card)};
+            if (match.empty()) {
+                board.set(card);
             } else {
-                hand[i & 1].set(board[card >> 2], true);
-                hand[i & 1].set(card, true);
-                board[card >> 2] = -1;
+                hand[i & 1].set(match[0]);
+                hand[i & 1].set(card);
+                board.set(match[0], false);
                 if (hand[i & 1].score()) {
                     if (score[1 - (i & 1)]) break;
                     score[i & 1] = hand[i & 1].score();
