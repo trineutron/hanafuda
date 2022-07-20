@@ -109,7 +109,7 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
 
 int main() {
     std::map<int, int> result;
-    int s = 0;
+    int s = 0, s_abs = 0;
     for (int _ = 0; _ < 100; _++) {
         for (;;) {
             std::array<Gain, 2> gain{};
@@ -144,6 +144,7 @@ int main() {
                 }
                 result[res]++;
                 s += res;
+                s_abs += abs(res);
                 break;
             }
         }
@@ -152,6 +153,6 @@ int main() {
     for (auto &&[res, count] : result) {
         std::cout << res << '\t' << count << std::endl;
     }
-    std::cout << '\t' << s << std::endl;
+    std::cout << s << '\t' << s_abs << std::endl;
     return 0;
 }
