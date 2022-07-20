@@ -9,25 +9,18 @@
 
 xrand rng;
 
+constexpr int inf = 100;
+
 int score(const std::array<Gain, 2> &gain, int turn) {
-    int score0 = gain[0].score();
-    int score1 = gain[1].score();
-    if (score0 == 0 and score1 == 0) return -90;
-    int res = 0;
-    if (score0 and not score1) {
-        res = score0;
-    } else if (score1 and not score0) {
-        res = -score1;
-    }
-    if (turn) res = -res;
-    if (res < 0) return -100;
+    int res = gain[turn].score();
+    if (res == 0) return -inf;
     return res;
 }
 
 int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
          const std::array<int, 48> &deck, int seen, int alpha, int beta) {
     if (seen == 40) {
-        if (score(gain, 0) == -90) {
+        if (gain[0].score() == 0 and gain[1].score() == 0) {
             return 6;  // 親権
         }
         return 0;
@@ -141,7 +134,12 @@ int main() {
             }
 
             if (good) {
-                int res = play(gain, hand, board, deck, 24, -80, 80);
+                int res = play(gain, hand, board, deck, 24, -1, 1);
+                if (res > 0) {
+                    res = play(gain, hand, board, deck, 24, res, inf);
+                } else {
+                    res = play(gain, hand, board, deck, 24, -inf, res);
+                }
                 std::cout << res << std::endl;
                 s += res;
                 break;
