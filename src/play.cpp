@@ -20,7 +20,7 @@ int score(const std::array<Gain, 2> &gain, int turn) {
 int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
          const std::array<int, 48> &deck, int seen, int alpha, int beta) {
     if (seen == 40) {
-        if (gain[0].score() == 0 and gain[1].score() == 0) {
+        if (score(gain, 0) == -inf and score(gain, 1) == -inf) {
             return 6;  // 親権
         }
         return 0;
