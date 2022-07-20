@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <iostream>
+#include <map>
 #include <numeric>
 #include <vector>
 
@@ -107,6 +108,7 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
 }
 
 int main() {
+    std::map<int, int> result;
     int s = 0;
     for (int _ = 0; _ < 100; _++) {
         for (;;) {
@@ -140,12 +142,16 @@ int main() {
                 } else {
                     res = play(gain, hand, board, deck, 24, -inf, res);
                 }
-                std::cout << res << std::endl;
+                result[res]++;
                 s += res;
                 break;
             }
         }
     }
-    std::cout << s << std::endl;
+
+    for (auto &&[res, count] : result) {
+        std::cout << res << '\t' << count << std::endl;
+    }
+    std::cout << '\t' << s << std::endl;
     return 0;
 }
