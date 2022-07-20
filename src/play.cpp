@@ -26,7 +26,6 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
         return 0;
     }
     const int turn = seen & 1, card_deck = deck[seen];
-    int res = alpha;
     std::vector<int> cards;
     for (int i = 0; i < 48; i++) {
         if (not hand[turn].get(i)) continue;
@@ -43,23 +42,23 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
             const auto match_deck{board.match(card_deck)};
             if (match_deck.empty()) {
                 board.set(card_deck);
-                res = std::max(
-                    res, -play(gain, hand, board, deck, seen + 1, -beta, -res));
+                alpha = std::max(
+                    alpha, -play(gain, hand, board, deck, seen + 1, -beta, -alpha));
                 board.set(card_deck, false);
             } else {
                 for (auto &&take_deck : match_deck) {
                     board.set(take_deck, false);
                     gain[turn].set(card_deck);
                     gain[turn].set(take_deck);
-                    res = std::max(res, score(gain, turn));
-                    if (res < beta) {
-                        res = std::max(res, -play(gain, hand, board, deck,
-                                                  seen + 1, -beta, -res));
+                    alpha = std::max(alpha, score(gain, turn));
+                    if (alpha < beta) {
+                        alpha = std::max(alpha, -play(gain, hand, board, deck,
+                                                  seen + 1, -beta, -alpha));
                     }
                     board.set(take_deck);
                     gain[turn].set(card_deck, false);
                     gain[turn].set(take_deck, false);
-                    if (res >= beta) break;
+                    if (alpha >= beta) break;
                 }
             }
             board.set(card, false);
@@ -71,10 +70,10 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
                 const auto match_deck{board.match(card_deck)};
                 if (match_deck.empty()) {
                     board.set(card_deck);
-                    res = std::max(res, score(gain, turn));
-                    if (res < beta) {
-                        res = std::max(res, -play(gain, hand, board, deck,
-                                                  seen + 1, -beta, -res));
+                    alpha = std::max(alpha, score(gain, turn));
+                    if (alpha < beta) {
+                        alpha = std::max(alpha, -play(gain, hand, board, deck,
+                                                  seen + 1, -beta, -alpha));
                     }
                     board.set(card_deck, false);
                 } else {
@@ -82,28 +81,28 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
                         board.set(take_deck, false);
                         gain[turn].set(card_deck);
                         gain[turn].set(take_deck);
-                        res = std::max(res, score(gain, turn));
-                        if (res < beta) {
-                            res = std::max(res, -play(gain, hand, board, deck,
-                                                      seen + 1, -beta, -res));
+                        alpha = std::max(alpha, score(gain, turn));
+                        if (alpha < beta) {
+                            alpha = std::max(alpha, -play(gain, hand, board, deck,
+                                                      seen + 1, -beta, -alpha));
                         }
                         board.set(take_deck);
                         gain[turn].set(card_deck, false);
                         gain[turn].set(take_deck, false);
-                        if (res >= beta) break;
+                        if (alpha >= beta) break;
                     }
                 }
                 board.set(take);
                 gain[turn].set(card, false);
                 gain[turn].set(take, false);
-                if (res >= beta) break;
+                if (alpha >= beta) break;
             }
         }
         hand[turn].set(card);
-        if (res >= beta) break;
+        if (alpha >= beta) break;
     }
 
-    return res;
+    return alpha;
 }
 
 int main() {
