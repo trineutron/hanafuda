@@ -42,8 +42,8 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
             const auto match_deck{board.match(card_deck)};
             if (match_deck.empty()) {
                 board.set(card_deck);
-                alpha = std::max(
-                    alpha, -play(gain, hand, board, deck, seen + 1, -beta, -alpha));
+                alpha = std::max(alpha, -play(gain, hand, board, deck, seen + 1,
+                                              -beta, -alpha));
                 board.set(card_deck, false);
             } else {
                 for (auto &&take_deck : match_deck) {
@@ -53,7 +53,7 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
                     alpha = std::max(alpha, score(gain, turn));
                     if (alpha < beta) {
                         alpha = std::max(alpha, -play(gain, hand, board, deck,
-                                                  seen + 1, -beta, -alpha));
+                                                      seen + 1, -beta, -alpha));
                     }
                     board.set(take_deck);
                     gain[turn].set(card_deck, false);
@@ -73,7 +73,7 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
                     alpha = std::max(alpha, score(gain, turn));
                     if (alpha < beta) {
                         alpha = std::max(alpha, -play(gain, hand, board, deck,
-                                                  seen + 1, -beta, -alpha));
+                                                      seen + 1, -beta, -alpha));
                     }
                     board.set(card_deck, false);
                 } else {
@@ -83,7 +83,8 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
                         gain[turn].set(take_deck);
                         alpha = std::max(alpha, score(gain, turn));
                         if (alpha < beta) {
-                            alpha = std::max(alpha, -play(gain, hand, board, deck,
+                            alpha =
+                                std::max(alpha, -play(gain, hand, board, deck,
                                                       seen + 1, -beta, -alpha));
                         }
                         board.set(take_deck);
