@@ -108,9 +108,10 @@ int play(std::array<Gain, 2> &gain, std::array<Gain, 2> &hand, Gain &board,
 }
 
 int main() {
+    constexpr int iter = 100;
+
     std::map<int, int> result;
-    int s = 0, s_abs = 0;
-    for (int _ = 0; _ < 100; _++) {
+    for (int _ = 0; _ < iter; _++) {
         for (;;) {
             std::array<Gain, 2> gain{};
             std::array<Gain, 2> hand{};
@@ -143,16 +144,23 @@ int main() {
                     res = play(gain, hand, board, deck, 24, -inf, res);
                 }
                 result[res]++;
-                s += res;
-                s_abs += abs(res);
                 break;
             }
         }
     }
 
+    int s = 0, s_abs = 0, win_count = 0;
     for (auto &&[res, count] : result) {
         std::cout << res << '\t' << count << std::endl;
+        s += res * count;
+        s_abs += abs(res) * count;
+        if (res > 0) win_count += count;
     }
-    std::cout << s << '\t' << s_abs << std::endl;
+    std::cout << std::endl;
+    const double avg = double(s) / iter, win_rate = double(win_count) / iter;
+    std::cout << "average\t" << avg << std::endl;
+    std::cout << "avg_win\t" << double(s_abs) / iter << std::endl;
+    std::cout << "winrate\t" << win_rate << std::endl;
+    std::cout << "expect\t" << avg / (1 - win_rate) << std::endl;
     return 0;
 }
